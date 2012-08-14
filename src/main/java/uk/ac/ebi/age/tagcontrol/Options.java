@@ -14,7 +14,7 @@ public class Options {
     @Option(name = "-p", usage = "User password", metaVar = "PASS")
     private String password;
 
-    @Option(name = "-i", usage = "Submissions ID list", metaVar = "IDS")
+    @Option(name = "-i", usage = "Submissions ID list for add/remove operation. Same as -smb. (obsolete) ", metaVar = "IDS")
     private String submissionIdList;
 
     @Option(name = "-a", usage = "Tags list to add. Example: Security:Public,Manager:Enable=2012-01-01")
@@ -23,6 +23,17 @@ public class Options {
     @Option(name = "-r", usage = "Tags list to remove. Example: Security:Public,Manager:Enable")
     private String tagStringDel;
 
+    @Option(name = "-l", usage = "List tags")
+    private boolean listTags;
+
+    @Option(name = "-sbm", usage = "Submissions ID list")
+    private String submissionIDs;
+
+    @Option(name = "-smp", usage = "Sample ID list")
+    private String sampleIDs;
+    
+    @Option(name = "-grp", usage = "Group ID list")
+    private String groupIDs;
 
  public String getDatabaseURL()
  {
@@ -62,6 +73,26 @@ public class Options {
  public String getTagStringDel()
  {
   return tagStringDel;
+ }
+
+ public boolean isListTags()
+ {
+  return listTags;
+ }
+
+ public String getSubmissionIDs()
+ {
+  return submissionIDs;
+ }
+
+ public String getSampleIDs()
+ {
+  return sampleIDs;
+ }
+
+ public String getGroupIDs()
+ {
+  return groupIDs;
  }
 
 }

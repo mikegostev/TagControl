@@ -17,11 +17,11 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
 import uk.ac.ebi.age.admin.shared.Constants;
-import uk.ac.ebi.age.admin.shared.SubmissionConstants;
+import uk.ac.ebi.biosd.shared.TagControlConstants;
 
 public class TagControl
 {
- static final String    usage   = "java -jar TagControl.jar -h URL -u USER -p PASS -i ID1,ID2,... -a T1,T2,... -r T3,T4,...";
+ static final String    usage   = "java -jar TagControl.jar -h URL -u USER -p PASS [ -i ID1,ID2,... -a T1,T2,... -r T3,T4,... | -l ID ]";
 
  private static Options options = new Options();
 
@@ -58,20 +58,35 @@ public class TagControl
    return;
   }
   
-  if( options.getSubmissionIdList() == null )
-  {
-   System.err.println("Submission ID list can't be empty");
-   System.exit(1);
-   return;
-  }
+  String sbmList = null;
   
-  if( options.getTagStringAdd() == null && options.getTagStringDel() == null )
+  if( options.getSubmissionIdList() != null )
   {
-   System.err.println("Tags for insertion/deletion should be specified");
+   if( options.getSubmissionIDs() != null )
+   {
+    System.err.println("Options -i and -smb can't be user simultaneously");
+    System.exit(1);
+    return;
+   }
+   
+   sbmList = options.getSubmissionIdList();
+  }
+  else
+   sbmList = options.getSubmissionIDs();
+  
+  if( options.getTagStringAdd() == null && options.getTagStringDel() == null && ! options.isListTags())
+  {
+   System.err.println("Tags for insertion/deletion or -l option should be specified");
    System.exit(1);
    return;
   }
 
+  if( sbmList == null && options.getGroupIDs() == null && options.getSampleIDs() == null )
+  {
+   System.err.println("Sample, group or submission identifiers should be specified for the operation");
+   System.exit(1);
+   return;
+  }
   
   boolean ok = false;
   String sessionKey = null;
@@ -138,14 +153,25 @@ public class TagControl
 
    List<NameValuePair> nvps = new ArrayList<NameValuePair>();
    nvps.add(new BasicNameValuePair(Constants.sessionKey, sessionKey));
-   nvps.add(new BasicNameValuePair(Constants.serviceHandlerParameter, Constants.SUBMISSION_TAGS_COMMAND));
-   nvps.add(new BasicNameValuePair(SubmissionConstants.SUBMISSON_ID, options.getSubmissionIdList()));
+   nvps.add(new BasicNameValuePair(Constants.serviceHandlerParameter, uk.ac.ebi.biosd.shared.Constants.BIOSD_TAG_CONTROL_COMMAND));
+   
+   if( sbmList != null )
+    nvps.add(new BasicNameValuePair(TagControlConstants.SUBMISSON_ID, sbmList));
+
+   if( options.getSampleIDs() != null )
+    nvps.add(new BasicNameValuePair(TagControlConstants.SAMPLE_ID, options.getSampleIDs()));
+
+   if( options.getGroupIDs() != null )
+    nvps.add(new BasicNameValuePair(TagControlConstants.GROUP_ID, options.getGroupIDs()));
 
    if( options.getTagStringAdd() != null )
-    nvps.add(new BasicNameValuePair(SubmissionConstants.SUBMISSON_TAGS, options.getTagStringAdd()));
+    nvps.add(new BasicNameValuePair(TagControlConstants.TAGS_TO_ADD, options.getTagStringAdd()));
 
    if( options.getTagStringDel() != null )
-    nvps.add(new BasicNameValuePair(SubmissionConstants.SUBMISSON_TAGS_RM, options.getTagStringDel()));
+    nvps.add(new BasicNameValuePair(TagControlConstants.TAGS_TO_REMOVE, options.getTagStringDel()));
+
+   if( options.isListTags() )
+    nvps.add(new BasicNameValuePair(TagControlConstants.LIST_TAGS, "on"));
    
    httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 

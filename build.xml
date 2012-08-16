@@ -5,13 +5,14 @@
 
 	<!-- <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/> -->
 
-	<property name="src" location="src"/>
+	<property name="src" location="src/main/java"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="dist"/>
 
 	<property name="AGE" location="../AGE"/>
 	<property name="AGEAdmin" location="../AGE-admin"/>
 	<property name="Commons" location="../Commons"/>
+	<property name="BioSD" location="../BioSD"/>
 
 
   <path id="lib">
@@ -51,7 +52,7 @@
 		</javac>
 
 -->
-		<javac srcdir="${src}" destdir="${build}" classpath="${toString:lib}" sourcepath="${Commons}/src/main/java:${AGE}/src/main/java:${AGEAdmin}/src/main/java" source="1.6" target="1.6" debug="on" nowarn="on" includeAntRuntime="false">
+		<javac srcdir="${src}" destdir="${build}" classpath="${toString:lib}" sourcepath="${Commons}/src/main/java:${AGE}/src/main/java:${AGEAdmin}/src/main/java:${BioSD}/src/main/java" source="1.6" target="1.6" debug="on" nowarn="on" includeAntRuntime="false">
 			<compilerarg value="-Xlint:deprecation"/>
 		</javac>
 

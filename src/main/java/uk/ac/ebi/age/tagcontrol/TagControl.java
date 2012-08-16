@@ -21,13 +21,21 @@ import uk.ac.ebi.biosd.shared.TagControlConstants;
 
 public class TagControl
 {
- static final String    usage   = "java -jar TagControl.jar -h URL -u USER -p PASS [ -i ID1,ID2,... -a T1,T2,... -r T3,T4,... | -l ID ]";
+ static final String    usage   = "java -jar TagControl.jar -h URL -u USER -p PASS [-smp ID1,ID2,...] [-grp ID1,ID2,...] [-sbm ID1,ID2,...] -a T1,T2,... -r T3,T4,...  -l";
 
  private static Options options = new Options();
 
  public static void main(String[] args)
  {
   CmdLineParser parser = new CmdLineParser(options);
+
+  if( args.length == 0 )
+  {
+   System.err.println(usage);
+   parser.printUsage(System.err);
+   System.exit(10);
+   return;
+  }
 
   try
   {

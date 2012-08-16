@@ -26,13 +26,13 @@ public class Options {
     @Option(name = "-l", usage = "List tags")
     private boolean listTags;
 
-    @Option(name = "-sbm", usage = "Submissions ID list")
+    @Option(name = "-sbm", usage = "Submissions ID list (comma separated)")
     private String submissionIDs;
 
-    @Option(name = "-smp", usage = "Sample ID list")
+    @Option(name = "-smp", usage = "Sample ID list (comma separated)")
     private String sampleIDs;
     
-    @Option(name = "-grp", usage = "Group ID list")
+    @Option(name = "-grp", usage = "Group ID list (comma separated)")
     private String groupIDs;
 
  public String getDatabaseURL()
